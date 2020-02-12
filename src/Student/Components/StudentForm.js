@@ -18,7 +18,7 @@ const StudentForm = () => {
             <input type="text" name='lastName' ref={register} />
             <label htmlFor="age">age</label>
 
-            <input type="file" name='resume'>Upload Your Resume</input>>
+            <input type="file" name='resume' />
             <button type='submit'>Sign Up</button>
         </form>
     )
