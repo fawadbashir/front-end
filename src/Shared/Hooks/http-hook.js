@@ -12,8 +12,8 @@ export const useHttpClient = () => {
 
         const httpAbortCntrl = new AbortController()
         activeHttpRequests.current.push(httpAbortCntrl)
-        setIsLoading(true)
 
+        setIsLoading(true)
         try {
 
 
@@ -40,8 +40,10 @@ export const useHttpClient = () => {
     const clearError = () => {
         setError(null)
     }
+
+
     useEffect(() => {
-        return () => activeHttpRequests.current.forEach((abortCntrl) => abortCntrl.abort())
+        return () => activeHttpRequests.current.forEach((abortCtrl) => abortCtrl.abort())
     }
         , [])
 

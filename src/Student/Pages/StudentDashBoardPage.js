@@ -6,8 +6,8 @@ const StudentDashBoardPage = () => {
     const [isRegistered, setIsRegistered] = useState(true)
     return (
         <div>
-            {!isRegistered ? <Companies /> : <StudentForm />}
-            hello
+            {isRegistered ? <Companies /> : <StudentForm />}
+
         </div>
     )
 }

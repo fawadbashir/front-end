@@ -10,31 +10,34 @@ import ApplyJobPage from './Jobs/Pages/ApplyJobPage'
 import { AuthContext } from './Shared/Context/auth-context'
 import Navigation from './Shared/Navigation/Navigation';
 
-import Grid from '@material-ui/core/Grid'
+
+
+
 
 
 
 function App() {
 
+  
   const [userState, setUserState] = useState({ isLoggedIn: false, userType: '' })
 
+  
 
-  const login = useCallback(() => setUserState({ isLoggedIn: true, userType: 'company' }), [])
+  const login = useCallback((userType) => setUserState({ isLoggedIn: true, userType }), [])
   const logout = useCallback(() => setUserState({ isLoggedIn: false, userType: '' }), [])
 
   let routes
 
 
-
   if (userState.isLoggedIn && userState.userType === 'company') {
     routes = (
       <>
-        {/* <Grid> */}
+
         <Route path='/' exact><CompanyDashBoardPage /></Route>
         <Route path='/company/jobs/new' ><NewJob /></Route>
         <Route path='/company/jobs/:jobid/applied'><CandidateList /></Route>
         <Redirect to='/' />
-        {/* </Grid> */}
+
       </>
     )
   }
@@ -53,27 +56,30 @@ function App() {
 
     routes = (
       <>
-        {/* <Grid container> */}
+
 
         <Route path='/' exact ><HomePage /></Route>
+        <Redirect to='/' />
 
-        {/* </Grid> */}
+
       </>
     )
   }
+
+
 
   return (
     <AuthContext.Provider value={{ isLoggedIn: userState.isLoggedIn, login, logout, userType: userState.userType }}>
 
       <Router>
-        <Navigation />
-        {/* <Grid> */}
+        {userState.isLoggedIn && <Navigation />}
         <Switch>
-
-          {routes}
-
+          
+              
+                {routes}
+              
+            
         </Switch>
-        {/* </Grid> */}
       </Router>
     </AuthContext.Provider>
   );
