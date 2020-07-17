@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { NavLink, Link } from 'react-router-dom'
-import Typography from '@material-ui/core/Typography'
+
+
 
 
 import { AuthContext } from '../Context/auth-context'
@@ -26,10 +27,10 @@ const Navigation = () => {
 
 
     let userNavigation = () => {
-        if (auth.isLoggedIn && auth.userType === 'student') {
+        if (auth.userId && auth.userType === 'student') {
             return <StudentLinks auth={auth} />
         }
-        else if (auth.isLoggedIn && auth.userType === 'company') {
+        else if (auth.userId && auth.userType === 'company') {
             return <CompanyLinks auth={auth} />
         }
     }

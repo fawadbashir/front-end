@@ -1,5 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import { ThemeProvider } from '@material-ui/core/styles';
+import { companyTheme } from './Shared/UIElements/theme'
 import HomePage from './Shared/Pages/HomePage'
 import CompanyDashBoardPage from './Company/Pages/CompanyDashBoardPage'
 import StudentDashBoardPage from './Student/Pages/StudentDashBoardPage';
@@ -10,44 +12,61 @@ import ApplyJobPage from './Jobs/Pages/ApplyJobPage'
 import { AuthContext } from './Shared/Context/auth-context'
 import Navigation from './Shared/Navigation/Navigation';
 
-
-
-
-
-
-
 function App() {
 
   
-  const [userState, setUserState] = useState({ isLoggedIn: false, userType: '' })
-
+  const [userState, setUserState] = useState({ userId : '', userType: '', token : '' })
   
 
-  const login = useCallback((userType) => setUserState({ isLoggedIn: true, userType }), [])
-  const logout = useCallback(() => setUserState({ isLoggedIn: false, userType: '' }), [])
+  const login = useCallback((userId, userType, token) => {
+    localStorage.setItem('userData', JSON.stringify({userId, userType,token}))
+    setUserState({ userId, userType, token })
+  }, [])
+
+
+  const logout = useCallback((token) => {
+    
+    fetch('http://localhost:5000/users/logout',{
+      method : 'POST',
+      headers : {Authorization : `Bearer ${token}`}
+    }).then((data) => {
+      localStorage.removeItem('userData')
+      setUserState({ userId: '', userType: '',token : '' })  
+    console.log(data)})
+    .catch((e) => console.log(e))
+   }, [])
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('userData'))
+    if( userData && userData.token) {
+      login(userData.userId,userData.userType,userData.token)
+    }
+  },[login])
+  
+  
 
   let routes
 
 
-  if (userState.isLoggedIn && userState.userType === 'company') {
+  if (userState.userId && userState.userType === 'company') {
     routes = (
       <>
-
+      
         <Route path='/' exact><CompanyDashBoardPage /></Route>
-        <Route path='/company/jobs/new' ><NewJob /></Route>
-        <Route path='/company/jobs/:jobid/applied'><CandidateList /></Route>
+        <Route path='/newjob' ><NewJob /></Route>
+        <Route path='/jobs/:jobid/applied'><CandidateList /></Route>
         <Redirect to='/' />
-
+        
       </>
     )
   }
-  else if (userState.isLoggedIn && userState.userType === 'student') {
+  else if (userState.userId && userState.userType === 'student') {
     routes = (
       <>
 
         <Route path='/' exact><StudentDashBoardPage /></Route>
         <Route path='/student/jobs' exact><Jobs /></Route>
         <Route path='/student/jobs/:jobid/apply' ><ApplyJobPage /></Route>
+        <Route path= '/appliedJobs'>Applied Jobs</Route>
         <Redirect to='/' />
 
       </>
@@ -56,8 +75,6 @@ function App() {
 
     routes = (
       <>
-
-
         <Route path='/' exact ><HomePage /></Route>
         <Redirect to='/' />
 
@@ -69,18 +86,18 @@ function App() {
 
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn: userState.isLoggedIn, login, logout, userType: userState.userType }}>
-
+    <AuthContext.Provider value={{ userId: userState.userId, token :userState.token, login, logout, userType: userState.userType }}>
+      <ThemeProvider theme={companyTheme}>
       <Router>
-        {userState.isLoggedIn && <Navigation />}
+        {userState.userId && <Navigation />}
+          {/* <Paper  style={{width : '100vw'}} > */}
         <Switch>
-          
-              
-                {routes}
-              
+          {routes}
             
         </Switch>
+          {/* </Paper>           */}
       </Router>
+      </ThemeProvider>
     </AuthContext.Provider>
   );
 }

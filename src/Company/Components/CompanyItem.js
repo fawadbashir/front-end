@@ -3,8 +3,8 @@ import React from 'react'
 const CompanyItem = (props) => {
     return (
         <div>
-            <p>{props.name}</p>
-            <p>{props.Address}</p>
+            <p>{props.name} {props.address}</p>
+            
         </div>
     )
 }
