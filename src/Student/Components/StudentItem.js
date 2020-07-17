@@ -5,7 +5,7 @@ const StudentItem = (props) => {
         <div>
             <p>{props.firstName} {props.lastName}</p>
             <p>{props.age}</p>
-            <p>{props.email}</p>
+            <p>{props.qualification}</p>
         </div>
     )
 }

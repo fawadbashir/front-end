@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import Button from '@material-ui/core/Button'
 
-const JobItem = () => {
+
+
+const JobItem = (props) => {   
+    
+        
     return (
         <div>
-            This is job Item
+           <p>{props.description} {props.pay} {props.requirement} 
+           <Button variant='contained' color='primary' >Apply</Button> 
+            </p>
+            
+           
         </div>
     )
 }

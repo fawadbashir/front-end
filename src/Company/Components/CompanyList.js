@@ -10,7 +10,7 @@ const CompanyList = (props) => {
     return (
         <div>
             <h1>List Of Companies</h1>
-            <ul>{props.companiesList.map((company) => <CompanyItem key={company.id} {...company} />)}</ul>
+            <ul>{props.companiesList.map((company) => <CompanyItem key={company._id} {...company} />)}</ul>
         </div>
     )
 }
