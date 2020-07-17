@@ -3,7 +3,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 
 export const useHttpClient = () => {
     const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState('')
+    const [error, setError] = useState()
 
     const activeHttpRequests = useRef([])
 
@@ -26,22 +26,19 @@ export const useHttpClient = () => {
             const responseData = await response.json()
             activeHttpRequests.current = activeHttpRequests.current.filter((reqCtrl) => reqCtrl !== httpAbortCntrl)
             if (!response.ok) {
-                console.log(response)
-                // throw new Error(`can't process request`)
+                throw new Error(`can't process request`)
             }
-            console.log(response)
             setIsLoading(false)
             return responseData
         } catch (e) {
-            console.log(e.message)
             setError(e)
             setIsLoading(false)
-            
+            throw e
         }
 
     }, [])
     const clearError = () => {
-        setError('')
+        setError(null)
     }
 
 
@@ -50,5 +47,5 @@ export const useHttpClient = () => {
     }
         , [])
 
-    return {isLoading, error, sendRequest, clearError}
+    return [isLoading, error, sendRequest, clearError]
 }

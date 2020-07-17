@@ -9,7 +9,7 @@ const StudentsList = (props) => {
 
 
     return (
-        props.studentsList.map((student) => <StudentItem key={student._id} {...student} />)
+        props.studentsList.map((student) => <StudentItem key={student.id} {...student} />)
     )
 
 }
